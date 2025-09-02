@@ -33,8 +33,8 @@
         position: absolute;
         left: 30px;
         top: 5px;
-        height: 90px;   /* बड़ा */
-        width: 90px;    /* बड़ा */
+        height: 90px;
+        width: 90px;
         object-fit: contain;
     }
     .header h1 { font-size: 26px; margin: 0; font-weight: bold; }
@@ -77,6 +77,7 @@
         background: #fafafa;
         position: relative;
         line-height: 1.5;
+        white-space: pre-wrap;
     }
     .question img {
         display: block;
@@ -90,6 +91,7 @@
         margin-left: 25px;
         font-size: 15px;
         line-height: 1.5;
+        white-space: pre-wrap;
     }
     .btn {
         background: #007BFF;
@@ -108,14 +110,13 @@
         font-family: inherit; 
         font-size: 15px; 
         line-height: 1.5;
-        white-space: pre-wrap;  /* Enter दबाकर नई line दिखे */
+        white-space: pre-wrap;
     }
     @media print {
         #input-section, .btn { display: none; }
         body { background: white; }
         .container { box-shadow: none; padding: 0; }
     }
-    /* Crop Modal */
     #cropModal {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000;
@@ -259,7 +260,7 @@ function addQuestion(imgData){
     
     const div=document.createElement('div');
     div.className='question';
-    div.innerHTML=`<strong>Q.${qNo++}</strong> ${text.replace(/\n/g,"<br>")} <span style="float:right;">[${marks} Marks]</span>`;
+    div.innerHTML=`<strong>Q.${qNo++}</strong> ${text.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>")} <span style="float:right;">[${marks} Marks]</span>`;
     
     // Sub-questions
     if(subText.trim()!==""){
@@ -268,7 +269,7 @@ function addQuestion(imgData){
             if(s.trim()!==""){
                 const subDiv=document.createElement('div');
                 subDiv.className='sub-question';
-                subDiv.innerHTML=`(${String.fromCharCode(97+i)}) ${s.replace(/\n/g,"<br>")}`;
+                subDiv.innerHTML=`(${String.fromCharCode(97+i)}) ${s.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>")}`;
                 div.appendChild(subDiv);
             }
         });
