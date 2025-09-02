@@ -109,7 +109,8 @@
         white-space: pre-wrap;
     }
     @media print {
-        #input-section, .btn { display: none; }
+        #input-section, 
+        .btn { display: none !important; }
         body { background: white; }
         .container { box-shadow: none; padding: 0; }
     }
@@ -297,7 +298,7 @@ function addQuestion(imgData){
 // Edit Question
 function editQuestion(btn){
     let span = btn.parentElement.querySelector(".q-text");
-    let old = span.innerText;
+    let old = span.textContent;
     let updated = prompt("Edit your question:", old);
     if(updated!==null && updated.trim()!==""){
         span.innerHTML = updated.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>");
@@ -307,7 +308,7 @@ function editQuestion(btn){
 // Edit Sub-question
 function editSubQuestion(btn){
     let span = btn.parentElement.querySelector(".sub-text");
-    let old = span.innerText;
+    let old = span.textContent;
     let updated = prompt("Edit your sub-question:", old);
     if(updated!==null && updated.trim()!==""){
         span.innerHTML = updated.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>");
