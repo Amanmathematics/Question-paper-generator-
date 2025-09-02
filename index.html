@@ -33,14 +33,14 @@
         position: absolute;
         left: 30px;
         top: 5px;
-        height: 90px;
-        width: 90px;
+        height: 70px;
+        width: 70px;
         object-fit: contain;
     }
-    .header h1 { font-size: 26px; margin: 0; font-weight: bold; }
-    .header h2 { font-size: 18px; margin: 2px 0; font-weight: normal; }
-    .header p { font-size: 14px; margin: 0; }
-    #examTitle { font-size: 16px; font-style: italic; display: block; margin-top: 5px; }
+    .header h1 { font-size: 22px; margin: 0; font-weight: bold; }
+    .header h2 { font-size: 16px; margin: 2px 0; font-weight: normal; }
+    .header p { font-size: 13px; margin: 0; }
+    #examTitle { font-size: 14px; font-style: italic; display: block; margin-top: 4px; }
     .info {
         display: flex;
         justify-content: space-between;
@@ -48,7 +48,7 @@
         margin-top: 8px;
         align-items: center;
     }
-    .subject { font-size: 18px; font-weight: bold; flex: 1; text-align: center; }
+    .subject { font-size: 16px; font-weight: bold; flex: 1; text-align: center; }
     hr { border: 1px solid black; margin: 10px 0; }
     #questions {
         position: relative;
@@ -69,13 +69,8 @@
         height: auto;
     }
     .question {
-        margin-bottom: 15px;
+        margin-bottom: 12px;
         font-size: 15px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        border-radius: 8px;
-        background: #fafafa;
-        position: relative;
         line-height: 1.5;
         white-space: pre-wrap;
     }
@@ -96,11 +91,12 @@
     .btn {
         background: #007BFF;
         color: white;
-        padding: 10px 15px;
+        padding: 4px 8px;
         border: none;
         cursor: pointer;
-        margin: 5px;
-        border-radius: 5px;
+        margin-left: 10px;
+        border-radius: 4px;
+        font-size: 12px;
     }
     .btn:hover { background: #0056b3; }
     input, select, textarea { width: 80%; padding: 6px; margin-bottom: 10px; }
@@ -260,7 +256,9 @@ function addQuestion(imgData){
     
     const div=document.createElement('div');
     div.className='question';
-    div.innerHTML=`<strong>Q.${qNo++}</strong> ${text.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>")} <span style="float:right;">[${marks} Marks]</span>`;
+    div.innerHTML=`<strong>Q.${qNo++}</strong> <span class="q-text">${text.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>")}</span> 
+                   <span style="float:right;">[${marks} Marks]</span>
+                   <button class="btn" onclick="editQuestion(this)">✏️ Edit</button>`;
     
     // Sub-questions
     if(subText.trim()!==""){
@@ -269,7 +267,8 @@ function addQuestion(imgData){
             if(s.trim()!==""){
                 const subDiv=document.createElement('div');
                 subDiv.className='sub-question';
-                subDiv.innerHTML=`(${String.fromCharCode(97+i)}) ${s.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>")}`;
+                subDiv.innerHTML=`(${String.fromCharCode(97+i)}) <span class="sub-text">${s.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>")}</span>
+                                  <button class="btn" onclick="editSubQuestion(this)">✏️ Edit</button>`;
                 div.appendChild(subDiv);
             }
         });
@@ -293,6 +292,26 @@ function addQuestion(imgData){
     document.getElementById('subQuestionText').value='';
     document.getElementById('questionMarks').value='';
     document.getElementById('diagramUpload').value='';
+}
+
+// Edit Question
+function editQuestion(btn){
+    let span = btn.parentElement.querySelector(".q-text");
+    let old = span.innerText;
+    let updated = prompt("Edit your question:", old);
+    if(updated!==null && updated.trim()!==""){
+        span.innerHTML = updated.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>");
+    }
+}
+
+// Edit Sub-question
+function editSubQuestion(btn){
+    let span = btn.parentElement.querySelector(".sub-text");
+    let old = span.innerText;
+    let updated = prompt("Edit your sub-question:", old);
+    if(updated!==null && updated.trim()!==""){
+        span.innerHTML = updated.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>");
+    }
 }
 
 // Download PDF with A4 Size
