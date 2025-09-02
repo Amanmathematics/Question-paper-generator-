@@ -176,6 +176,7 @@
     <hr>
     Watermark: <input type="file" id="watermarkUpload" accept="image/*"><br>
     <button class="btn" onclick="downloadPDF()">Download PDF</button>
+    <button class="btn" onclick="printPage()">🖨️ Print / Save PDF</button>
 </div>
 
 <!-- Crop Modal -->
@@ -306,6 +307,11 @@ function downloadPDF(){
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
     html2pdf().set(opt).from(element).save();
+}
+
+// Direct Print (Laptop + Phone)
+function printPage(){
+    window.print();
 }
 </script>
 </body>
