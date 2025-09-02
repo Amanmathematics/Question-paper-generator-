@@ -16,8 +16,8 @@
         padding: 0;
     }
     .container {
-        width: 210mm;
-        min-height: 297mm;
+        width: 190mm;   /* FIXED: 210mm se thoda chhota, safe for PDF */
+        min-height: 277mm;
         margin: auto;
         background: white;
         padding: 20px 30px;
@@ -295,16 +295,16 @@ function addQuestion(imgData){
     document.getElementById('diagramUpload').value='';
 }
 
-// ✅ FIXED PDF FUNCTION
+// FIXED: Download PDF with safe margin
 function downloadPDF(){
     const element=document.getElementById('printArea');
     const opt = {
-        margin: [5,5,5,5], // prevent cutting
+        margin: [10, 10, 10, 10],  // safe margin so kuch cut na ho
         filename: 'QuestionPaper.pdf',
         image: { type: 'jpeg', quality: 1 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid','css','legacy'] }
+        pagebreak: { mode: ['avoid', 'css', 'legacy'] }
     };
     html2pdf().set(opt).from(element).save();
 }
