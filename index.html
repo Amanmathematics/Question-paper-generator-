@@ -295,15 +295,16 @@ function addQuestion(imgData){
     document.getElementById('diagramUpload').value='';
 }
 
-// ✅ Fixed Download PDF with A4 Safe Margins
+// ✅ FIXED PDF FUNCTION
 function downloadPDF(){
     const element=document.getElementById('printArea');
     const opt = {
-        margin: [10,10,10,10],   // safe margins
+        margin: [5,5,5,5], // prevent cutting
         filename: 'QuestionPaper.pdf',
         image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 2 }, // balanced quality & size
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid','css','legacy'] }
     };
     html2pdf().set(opt).from(element).save();
 }
