@@ -295,14 +295,14 @@ function addQuestion(imgData){
     document.getElementById('diagramUpload').value='';
 }
 
-// Download PDF with A4 Size
+// ✅ Fixed Download PDF with A4 Safe Margins
 function downloadPDF(){
     const element=document.getElementById('printArea');
     const opt = {
-        margin: 0,
+        margin: [10,10,10,10],   // safe margins
         filename: 'QuestionPaper.pdf',
         image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 3 },
+        html2canvas: { scale: 2 }, // balanced quality & size
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
     html2pdf().set(opt).from(element).save();
