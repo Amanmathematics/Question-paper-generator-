@@ -86,7 +86,6 @@
         height: auto;
         filter: grayscale(100%) contrast(150%) brightness(120%);
     }
-    .resize-slider { width: 100%; }
     .sub-question {
         margin-left: 25px;
         font-size: 15px;
@@ -282,11 +281,6 @@ function addQuestion(imgData){
         img.src=imgData;
         img.style.width='200px';
         div.appendChild(img);
-        const resize=document.createElement('input');
-        resize.type='range'; resize.min=100; resize.max=400; resize.value=200;
-        resize.className='resize-slider';
-        resize.oninput=()=>{img.style.width=resize.value+'px';};
-        div.appendChild(resize);
     }
     
     document.getElementById('questions').appendChild(div);
