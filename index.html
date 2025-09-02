@@ -33,14 +33,14 @@
         position: absolute;
         left: 30px;
         top: 5px;
-        height: 70px;
-        width: 70px;
+        height: 90px;
+        width: 90px;
         object-fit: contain;
     }
-    .header h1 { font-size: 22px; margin: 0; font-weight: bold; }
-    .header h2 { font-size: 16px; margin: 2px 0; font-weight: normal; }
-    .header p { font-size: 13px; margin: 0; }
-    #examTitle { font-size: 14px; font-style: italic; display: block; margin-top: 4px; }
+    .header h1 { font-size: 26px; margin: 0; font-weight: bold; }
+    .header h2 { font-size: 18px; margin: 2px 0; font-weight: normal; }
+    .header p { font-size: 14px; margin: 0; }
+    #examTitle { font-size: 16px; font-style: italic; display: block; margin-top: 5px; }
     .info {
         display: flex;
         justify-content: space-between;
@@ -48,7 +48,7 @@
         margin-top: 8px;
         align-items: center;
     }
-    .subject { font-size: 16px; font-weight: bold; flex: 1; text-align: center; }
+    .subject { font-size: 18px; font-weight: bold; flex: 1; text-align: center; }
     hr { border: 1px solid black; margin: 10px 0; }
     #questions {
         position: relative;
@@ -69,8 +69,13 @@
         height: auto;
     }
     .question {
-        margin-bottom: 12px;
+        margin-bottom: 15px;
         font-size: 15px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 8px;
+        background: #fafafa;
+        position: relative;
         line-height: 1.5;
         white-space: pre-wrap;
     }
@@ -91,12 +96,11 @@
     .btn {
         background: #007BFF;
         color: white;
-        padding: 4px 8px;
+        padding: 10px 15px;
         border: none;
         cursor: pointer;
-        margin-left: 10px;
-        border-radius: 4px;
-        font-size: 12px;
+        margin: 5px;
+        border-radius: 5px;
     }
     .btn:hover { background: #0056b3; }
     input, select, textarea { width: 80%; padding: 6px; margin-bottom: 10px; }
@@ -109,8 +113,7 @@
         white-space: pre-wrap;
     }
     @media print {
-        #input-section, 
-        .btn { display: none !important; }
+        #input-section, .btn { display: none; }
         body { background: white; }
         .container { box-shadow: none; padding: 0; }
     }
@@ -257,9 +260,7 @@ function addQuestion(imgData){
     
     const div=document.createElement('div');
     div.className='question';
-    div.innerHTML=`<strong>Q.${qNo++}</strong> <span class="q-text">${text.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>")}</span> 
-                   <span style="float:right;">[${marks} Marks]</span>
-                   <button class="btn" onclick="editQuestion(this)">✏️ Edit</button>`;
+    div.innerHTML=`<strong>Q.${qNo++}</strong> ${text.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>")} <span style="float:right;">[${marks} Marks]</span>`;
     
     // Sub-questions
     if(subText.trim()!==""){
@@ -268,8 +269,7 @@ function addQuestion(imgData){
             if(s.trim()!==""){
                 const subDiv=document.createElement('div');
                 subDiv.className='sub-question';
-                subDiv.innerHTML=`(${String.fromCharCode(97+i)}) <span class="sub-text">${s.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>")}</span>
-                                  <button class="btn" onclick="editSubQuestion(this)">✏️ Edit</button>`;
+                subDiv.innerHTML=`(${String.fromCharCode(97+i)}) ${s.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>")}`;
                 div.appendChild(subDiv);
             }
         });
@@ -293,26 +293,6 @@ function addQuestion(imgData){
     document.getElementById('subQuestionText').value='';
     document.getElementById('questionMarks').value='';
     document.getElementById('diagramUpload').value='';
-}
-
-// Edit Question
-function editQuestion(btn){
-    let span = btn.parentElement.querySelector(".q-text");
-    let old = span.textContent;
-    let updated = prompt("Edit your question:", old);
-    if(updated!==null && updated.trim()!==""){
-        span.innerHTML = updated.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>");
-    }
-}
-
-// Edit Sub-question
-function editSubQuestion(btn){
-    let span = btn.parentElement.querySelector(".sub-text");
-    let old = span.textContent;
-    let updated = prompt("Edit your sub-question:", old);
-    if(updated!==null && updated.trim()!==""){
-        span.innerHTML = updated.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>");
-    }
 }
 
 // Download PDF with A4 Size
