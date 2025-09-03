@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Advanced Question Paper Generator</title>
 
-<!-- Cropper.js CSS -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
 
 <style>
@@ -14,7 +13,9 @@
         background: #f5f5f5;
         margin: 0;
         padding: 0;
+        transition: background 0.3s, color 0.3s;
     }
+    .dark-mode { background:#1e1e1e; color:#f0f0f0; }
     .container {
         width: 210mm;
         min-height: 297mm;
@@ -23,12 +24,10 @@
         padding: 20px 30px;
         box-shadow: 0 0 10px #ccc;
         position: relative;
+        transition: background 0.3s, color 0.3s;
     }
-    .header {
-        text-align: center;
-        position: relative;
-        margin-bottom: 10px;
-    }
+    .dark-mode .container { background:#2b2b2b; color:#f0f0f0; }
+    .header { text-align: center; position: relative; margin-bottom: 10px; }
     .header img {
         position: absolute;
         left: 30px;
@@ -50,24 +49,7 @@
     }
     .subject { font-size: 18px; font-weight: bold; flex: 1; text-align: center; }
     hr { border: 1px solid black; margin: 10px 0; }
-    #questions {
-        position: relative;
-        z-index: 2;
-    }
-    .watermark {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        opacity: 0.1;
-        width: 80%;
-        z-index: 1;
-        text-align: center;
-    }
-    .watermark img {
-        max-width: 100%;
-        height: auto;
-    }
+    #questions { position: relative; z-index: 2; }
     .question {
         margin-bottom: 15px;
         font-size: 15px;
@@ -79,19 +61,16 @@
         line-height: 1.5;
         white-space: pre-wrap;
     }
-    .question img {
-        display: block;
-        margin: 10px auto;
-        max-width: 200px;
-        height: auto;
-        filter: grayscale(100%) contrast(150%) brightness(120%);
+    .dark-mode .question { background:#3b3b3b; border-color:#555; }
+    .question img { 
+        display:block; 
+        margin:10px auto; 
+        max-width:90%; 
+        height:auto; 
+        cursor:pointer; 
+        filter: grayscale(100%) contrast(150%) brightness(120%); 
     }
-    .sub-question {
-        margin-left: 25px;
-        font-size: 15px;
-        line-height: 1.5;
-        white-space: pre-wrap;
-    }
+    .sub-question { margin-left: 25px; font-size: 15px; line-height: 1.5; white-space: pre-wrap; }
     .btn {
         background: #007BFF;
         color: white;
@@ -103,16 +82,25 @@
     }
     .btn:hover { background: #0056b3; }
     input, select, textarea { width: 80%; padding: 6px; margin-bottom: 10px; }
-    textarea { 
-        min-height: 60px; 
-        resize: vertical; 
-        font-family: inherit; 
-        font-size: 15px; 
+    textarea {
+        min-height: 60px;
+        resize: vertical;
+        font-family: inherit;
+        font-size: 15px;
         line-height: 1.5;
         white-space: pre-wrap;
     }
+    #input-section {
+        margin-top:20px;
+        padding:15px;
+        border-radius:10px;
+        background: #ffe6f0; 
+        box-shadow:0 4px 10px rgba(0,0,0,0.3);
+        transition: background 0.3s, color 0.3s;
+    }
+    .dark-mode #input-section { background: linear-gradient(135deg,#2b3b4f,#1e2a3b); color:#f0f0f0; }
     @media print {
-        #input-section, .btn { display: none; }
+        #input-section, .btn, #newsTicker, #modeToggle, #welcomeScreen { display: none !important; }
         body { background: white; }
         .container { box-shadow: none; padding: 0; }
     }
@@ -120,14 +108,79 @@
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000;
     }
-    #cropBox { background: white; padding: 20px; }
+    #cropBox { background: white; padding: 20px; border-radius:8px; }
     #cropImage { max-width: 100%; }
+    #newsTicker {
+        width:100%;
+        overflow:hidden;
+        white-space:nowrap;
+        background:transparent;
+        font-weight:bold;
+        font-size:18px;
+        padding:5px 0;
+        color:#000;
+        position:fixed;
+        top:0;
+        left:0;
+        z-index:2000;
+        animation: ticker 15s linear infinite;
+    }
+    @keyframes ticker { 0%{transform:translateX(100%);} 100%{transform:translateX(-100%);} }
+
+    .img-menu {
+        position: absolute;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+        display: none;
+        flex-direction: column;
+        z-index: 3000;
+    }
+    .img-menu button {
+        margin: 3px 0;
+        padding: 5px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    #welcomeScreen {
+        position: fixed;
+        top:0; left:0; width:100%; height:100%;
+        background:#fff;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        z-index:5000;
+        transition: opacity 1s ease-in-out;
+    }
+    #welcomeScreen.fade-out {
+        opacity: 0;
+    }
+    #welcomeScreen h1 {
+        font-size: 50px;
+        color:#d63384;
+        margin:0;
+    }
+    #welcomeScreen h2 {
+        font-size: 32px;
+        color:#333;
+        margin-top:10px;
+    }
 </style>
 </head>
 <body>
 
-<div class="container" id="printArea">
-    <div class="watermark" id="watermark"></div>
+<div id="welcomeScreen">
+    <h1>आपका स्वागत है</h1>
+    <h2>Welcome</h2>
+</div>
+
+<div id="newsTicker">Aman Kumar Gupta 🖥️✨🎉</div>
+<button id="modeToggle" class="btn" style="position:fixed; top:5px; right:5px; z-index:2100;">Dark Mode</button>
+
+<div class="container" id="printArea" style="margin-top:40px; display:none;">
     <div class="header">
         <img id="schoolLogo" src="" alt="Logo">
         <h1 id="mainSchoolName">Main School Name</h1>
@@ -151,7 +204,7 @@
     <h3 style="text-align:center; margin-top:30px;">Best wishes</h3>
 </div>
 
-<div id="input-section" style="margin-top:20px;">
+<div id="input-section" style="display:none;">
     <h3>Set Details</h3>
     Logo: <input type="file" id="logoUpload" accept="image/*"><br>
     Main School Name: <input type="text" id="mainSchoolNameInput"><br>
@@ -168,17 +221,14 @@
     <h3>Add Question</h3>
     Question: <textarea id="questionText" placeholder="Type your question..."></textarea><br>
     Sub-Questions (one per line): <textarea id="subQuestionText" placeholder="Type sub-questions here..."></textarea><br>
-    Marks: <input type="number" id="questionMarks"><br>
-    Diagram? <input type="file" id="diagramUpload" accept="image/*"><br>
-    <button class="btn" onclick="cropAndAdd()">Crop & Add Question</button>
-    
-    <hr>
-    Watermark: <input type="file" id="watermarkUpload" accept="image/*"><br>
-    <button class="btn" onclick="downloadPDF()">Download PDF</button>
+    Marks (optional): <input type="number" id="questionMarks"><br>
+    Question Diagram? <input type="file" id="diagramUpload" accept="image/*"><br>
+    Sub-Question Images? <input type="file" id="subDiagramUpload" accept="image/*" multiple><br>
+    <button class="btn" onclick="cropAndAdd()">Crop & Add Question</button><br><br>
+
     <button class="btn" onclick="printPage()">🖨️ Print / Save PDF</button>
 </div>
 
-<!-- Crop Modal -->
 <div id="cropModal">
     <div id="cropBox">
         <img id="cropImage" src="">
@@ -189,123 +239,248 @@
     </div>
 </div>
 
-<!-- JS Libraries -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<div class="img-menu" id="imgMenu">
+    <button onclick="resizeImage()">Update Size</button>
+    <button onclick="changeImage()">Change Photo</button>
+    <button onclick="removeImage()">Remove Photo</button>
+</div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 <script>
 let qNo = 1;
 let cropper;
 let currentFile;
+let cropTarget = "main";
+let subImages = [];
+let targetQuestionImg = null;
+let clickedImg = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const inputSection = document.getElementById('input-section');
+    const printArea = document.getElementById('printArea');
+    setTimeout(() => {
+        welcomeScreen.classList.add('fade-out');
+        setTimeout(() => {
+            welcomeScreen.style.display = 'none';
+            inputSection.style.display = 'block';
+            printArea.style.display = 'block';
+        }, 1000); // Wait for the fade-out to complete
+    }, 1500); // Display welcome screen for 1.5 seconds
+});
 
 // Auto update header
-document.querySelectorAll('#mainSchoolNameInput,#subSchoolNameInput,#schoolAddressInput,#examTitleInput,#classInput,#dateInput,#subjectInput,#marksInput,#timeInput')
-.forEach(input=>{
-    input.addEventListener('input', ()=>{
-        document.getElementById('mainSchoolName').textContent=document.getElementById('mainSchoolNameInput').value;
-        document.getElementById('subSchoolName').textContent=document.getElementById('subSchoolNameInput').value;
-        document.getElementById('schoolAddress').textContent=document.getElementById('schoolAddressInput').value;
-        document.getElementById('examTitle').textContent=document.getElementById('examTitleInput').value;
-        document.getElementById('classText').textContent=document.getElementById('classInput').value;
-        document.getElementById('dateText').textContent=document.getElementById('dateInput').value;
-        document.getElementById('subjectText').textContent=document.getElementById('subjectInput').value;
-        document.getElementById('marksText').textContent=document.getElementById('marksInput').value;
-        document.getElementById('timeText').textContent=document.getElementById('timeInput').value;
+document.querySelectorAll('#mainSchoolNameInput, #subSchoolNameInput, #schoolAddressInput, #examTitleInput, #classInput, #dateInput, #subjectInput, #marksInput, #timeInput')
+.forEach(input => {
+    input.addEventListener('input', () => {
+        document.getElementById('mainSchoolName').textContent = document.getElementById('mainSchoolNameInput').value;
+        document.getElementById('subSchoolName').textContent = document.getElementById('subSchoolNameInput').value;
+        document.getElementById('schoolAddress').textContent = document.getElementById('schoolAddressInput').value;
+        document.getElementById('examTitle').textContent = document.getElementById('examTitleInput').value;
+        document.getElementById('classText').textContent = document.getElementById('classInput').value;
+        document.getElementById('dateText').textContent = document.getElementById('dateInput').value;
+        document.getElementById('subjectText').textContent = document.getElementById('subjectInput').value;
+        document.getElementById('marksText').textContent = document.getElementById('marksInput').value;
+        document.getElementById('timeText').textContent = document.getElementById('timeInput').value;
     });
 });
 
 // Logo upload
 document.getElementById('logoUpload').addEventListener('change', function(){
-    const file=this.files[0];
-    if(file){ document.getElementById('schoolLogo').src=URL.createObjectURL(file);}
-});
-
-// Watermark upload
-document.getElementById('watermarkUpload').addEventListener('change', function(){
-    const file=this.files[0];
-    if(file){ document.getElementById('watermark').innerHTML='<img src="'+URL.createObjectURL(file)+'">';}
+    const file = this.files[0];
+    if(file){ document.getElementById('schoolLogo').src = URL.createObjectURL(file);}
 });
 
 // Cropper Modal Functions
 function cropAndAdd(){
-    const file=document.getElementById('diagramUpload').files[0];
-    if(!file){
-        addQuestion(null); return;
-    }
-    currentFile=file;
-    const img=document.getElementById('cropImage');
-    img.src=URL.createObjectURL(file);
-    document.getElementById('cropModal').style.display='flex';
-    cropper=new Cropper(img,{aspectRatio:NaN});
+    const file = document.getElementById('diagramUpload').files[0];
+    if(!file){ addQuestion(null, 0, 0); return; }
+    openCrop("main", file);
+}
+
+function openCrop(target, file){
+    cropTarget = target;
+    currentFile = file;
+    const img = document.getElementById('cropImage');
+    img.src = URL.createObjectURL(file);
+    document.getElementById('cropModal').style.display = 'flex';
+    cropper = new Cropper(img, {aspectRatio: NaN});
 }
 
 function applyCrop(){
-    const canvas=cropper.getCroppedCanvas();
-    const imgData=canvas.toDataURL('image/png');
-    addQuestion(imgData);
+    const canvas = cropper.getCroppedCanvas();
+    const imgData = canvas.toDataURL('image/png');
+    const originalWidth = canvas.width;
+    const originalHeight = canvas.height;
+
+    let maxWidth = 600; // Restrict width so it fits in question box
+    let scale = Math.min(1, maxWidth / originalWidth);
+    let newWidthPx = originalWidth * scale;
+    let newHeightPx = originalHeight * scale;
+
+    if(cropTarget.startsWith("sub")){
+        const idx = parseInt(cropTarget.replace("sub", ""));
+        subImages[idx] = {src: imgData, w: newWidthPx, h: newHeightPx};
+    } else {
+        if(targetQuestionImg){ 
+            targetQuestionImg.src = imgData;
+            targetQuestionImg.style.width = newWidthPx + "px";
+            targetQuestionImg.style.height = newHeightPx + "px";
+            targetQuestionImg = null;
+        } else {
+            addQuestion(imgData, newWidthPx, newHeightPx);
+        }
+    }
+
     closeCrop();
 }
 
 function closeCrop(){
-    document.getElementById('cropModal').style.display='none';
-    cropper.destroy();
+    document.getElementById('cropModal').style.display = 'none';
+    if(cropper) {
+        cropper.destroy();
+        cropper = null;
+    }
 }
 
 // Add Question
-function addQuestion(imgData){
-    const text=document.getElementById('questionText').value;
-    const subText=document.getElementById('subQuestionText').value;
-    const marks=document.getElementById('questionMarks').value;
-    if(text.trim()===''||marks.trim()===''){alert('Enter question and marks');return;}
-    
-    const div=document.createElement('div');
-    div.className='question';
-    div.innerHTML=`<strong>Q.${qNo++}</strong> ${text.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>")} <span style="float:right;">[${marks} Marks]</span>`;
-    
-    // Sub-questions
-    if(subText.trim()!==""){
-        const subs=subText.split("\n");
-        subs.forEach((s,i)=>{
-            if(s.trim()!==""){
-                const subDiv=document.createElement('div');
-                subDiv.className='sub-question';
-                subDiv.innerHTML=`(${String.fromCharCode(97+i)}) ${s.replace(/ /g,"&nbsp;").replace(/\n/g,"<br>")}`;
+function addQuestion(imgData, w, h){
+    const text = document.getElementById('questionText').value;
+    const subText = document.getElementById('subQuestionText').value;
+    const marks = document.getElementById('questionMarks').value;
+
+    if(text.trim() === ''){ alert('Enter question'); return; }
+
+    const div = document.createElement('div');
+    let qHeader = `<strong>Q.${qNo++}</strong> ${text.replace(/ /g, "&nbsp;").replace(/\n/g, "<br>")}`;
+    if(marks.trim() !== ""){
+        qHeader += ` <span style="float:right;">[${marks} Marks]</span>`;
+    }
+    div.className = 'question';
+    div.innerHTML = qHeader;
+
+    if(subText.trim() !== ""){
+        const subs = subText.split("\n");
+        subs.forEach((s, i) => {
+            if(s.trim() !== ""){
+                const subDiv = document.createElement('div');
+                subDiv.className = 'sub-question';
+                subDiv.innerHTML = `(${String.fromCharCode(97 + i)}) ${s.replace(/ /g, "&nbsp;").replace(/\n/g, "<br>")}`;
+
+                if(subImages[i]){
+                    const img = document.createElement('img');
+                    img.src = subImages[i].src;
+                    img.style.width = subImages[i].w + "px";
+                    img.style.height = subImages[i].h + "px";
+                    img.addEventListener('click', imgClickHandler);
+                    subDiv.appendChild(img);
+                }
                 div.appendChild(subDiv);
             }
         });
     }
 
-    // Diagram
     if(imgData){
-        const img=document.createElement('img');
-        img.src=imgData;
-        img.style.width='200px';
+        const img = document.createElement('img');
+        img.src = imgData;
+        img.style.width = w + "px";
+        img.style.height = h + "px";
+        img.addEventListener('click', imgClickHandler);
         div.appendChild(img);
     }
-    
+
     document.getElementById('questions').appendChild(div);
-    document.getElementById('questionText').value='';
-    document.getElementById('subQuestionText').value='';
-    document.getElementById('questionMarks').value='';
-    document.getElementById('diagramUpload').value='';
+
+    document.getElementById('questionText').value = '';
+    document.getElementById('subQuestionText').value = '';
+    document.getElementById('questionMarks').value = '';
+    document.getElementById('diagramUpload').value = '';
+    document.getElementById('subDiagramUpload').value = '';
+    subImages = [];
 }
 
-// Download PDF with A4 Size
-function downloadPDF(){
-    const element=document.getElementById('printArea');
-    const opt = {
-        margin: 0,
-        filename: 'QuestionPaper.pdf',
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 3 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
+// Handle sub-question images upload
+document.getElementById('subDiagramUpload').addEventListener('change', function(){
+    const files = Array.from(this.files);
+    files.forEach((file, i) => {
+        if(file) openCrop('sub' + i, file);
+    });
+});
+
+// Direct Print
+function printPage(){ window.print(); }
+
+// Dark/White Mode Toggle
+document.getElementById("modeToggle").addEventListener("click", () => {
+    document.body.classList.toggle('dark-mode');
+    const btn = document.getElementById("modeToggle");
+    if(document.body.classList.contains("dark-mode")){
+        btn.textContent = "White Mode";
+    } else {
+        btn.textContent = "Dark Mode";
+    }
+});
+
+// Colorful news ticker
+setInterval(() => {
+    const ticker = document.getElementById('newsTicker');
+    const color = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+    ticker.style.color = color;
+}, 500);
+
+// ---------- Image menu handling ----------
+const imgMenu = document.getElementById("imgMenu");
+
+function imgClickHandler(e){
+    clickedImg = e.target;
+    imgMenu.style.display = "flex";
+    imgMenu.style.top = (e.pageY + 5) + "px";
+    imgMenu.style.left = (e.pageX + 5) + "px";
 }
 
-// Direct Print (Laptop + Phone)
-function printPage(){
-    window.print();
+document.addEventListener("click", function(e){
+    if(!imgMenu.contains(e.target) && e.target.tagName !== "IMG"){
+        imgMenu.style.display = "none";
+    }
+});
+
+function resizeImage(){
+    if(clickedImg){
+        let wcm = prompt("Enter new width (cm):", (clickedImg.width / 37.8).toFixed(2));
+        if(wcm){
+            let w = parseFloat(wcm) * 37.8;
+            let ratio = clickedImg.naturalHeight / clickedImg.naturalWidth;
+            let h = w * ratio;
+            clickedImg.style.width = w + "px";
+            clickedImg.style.height = h + "px";
+        }
+    }
+    imgMenu.style.display = "none";
+}
+
+function changeImage(){
+    if(clickedImg){
+        targetQuestionImg = clickedImg;
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = function(e){
+            const file = e.target.files[0];
+            if(file){
+                openCrop("main", file);
+            }
+        };
+        input.click();
+    }
+    imgMenu.style.display = "none";
+}
+
+function removeImage(){
+    if(clickedImg){
+        clickedImg.remove();
+        clickedImg = null;
+    }
+    imgMenu.style.display = "none";
 }
 </script>
 </body>
